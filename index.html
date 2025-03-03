@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bara Alsalfa (Outside the Context)</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.css"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+      };
+    </script>
+  </head>
+  <body
+    class="bg-gray-100 dark:bg-gray-900 min-h-screen text-gray-800 dark:text-gray-200"
+  >
+    <div class="container mx-auto px-4 py-8">
+      <div class="flex justify-between items-center mb-8">
+        <h1
+          class="text-3xl font-bold text-center text-blue-600 dark:text-blue-400"
+        >
+          Bara Alsalfa - خارج السياق
+        </h1>
+        <button
+          id="darkModeToggle"
+          class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700"
+        >
+          <svg
+            id="darkIcon"
+            class="w-6 h-6 hidden dark:block"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+          <svg
+            id="lightIcon"
+            class="w-6 h-6 block dark:hidden"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"
+            ></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Player Setup Screen -->
+      <div
+        id="playerSetup"
+        class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6"
+      >
+        <h2 class="text-xl font-semibold mb-4">Add Players</h2>
+        <form id="playerForm" class="mb-4">
+          <div class="flex mb-2">
+            <input
+              type="text"
+              id="playerName"
+              class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              placeholder="Enter player name"
+            />
+            <button
+              type="submit"
+              class="ml-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            >
+              Add
+            </button>
+          </div>
+        </form>
+
+        <h3 class="font-medium mb-2">Players:</h3>
+        <ul id="playerList" class="mb-4 list-disc list-inside"></ul>
+
+        <button
+          id="startGameBtn"
+          class="w-full text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center disabled:opacity-50 disabled:cursor-not-allowed dark:bg-green-500 dark:hover:bg-green-600 dark:focus:ring-green-800"
+          disabled
+        >
+          Select Category
+        </button>
+      </div>
+
+      <!-- Category Selection Screen -->
+      <div
+        id="categorySelection"
+        class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6 hidden"
+      >
+        <h2 class="text-xl font-semibold mb-4">Select a Category</h2>
+        <div
+          id="categoriesList"
+          class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4"
+        >
+          <!-- Categories will be populated here -->
+        </div>
+        <button
+          id="backToPlayersBtn"
+          class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 text-sm"
+        >
+          ← Back to Players
+        </button>
+      </div>
+
+      <!-- Player Role Reveal Screen -->
+      <div
+        id="roleRevealScreen"
+        class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6 hidden"
+      >
+        <h2 class="text-xl font-semibold mb-4">Pass the Phone</h2>
+        <div id="passingInstructions" class="mb-4">
+          <p class="mb-2">
+            Pass the phone to
+            <span id="currentPlayerReveal" class="font-bold"></span>
+          </p>
+          <p>Press "I'm Ready" when you have the phone.</p>
+        </div>
+
+        <button
+          id="playerReadyBtn"
+          class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-4 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-800"
+        >
+          I'm Ready
+        </button>
+
+        <div
+          id="roleInfo"
+          class="text-center p-5 mb-4 border border-gray-200 dark:border-gray-700 rounded-lg hidden"
+        >
+          <p class="text-lg mb-3">
+            The category is:
+            <span id="categoryDisplay" class="font-bold"></span>
+          </p>
+          <div id="nonImposterInfo" class="hidden">
+            <p class="text-lg mb-3">
+              You are
+              <span class="font-bold text-green-600 dark:text-green-400"
+                >NOT</span
+              >
+              the imposter!
+            </p>
+            <p class="text-lg">
+              The secret word is:
+              <span id="secretWordReveal" class="font-bold"></span>
+            </p>
+          </div>
+          <div id="imposterInfo" class="hidden">
+            <p class="text-lg mb-3">
+              You
+              <span class="font-bold text-red-600 dark:text-red-400">ARE</span>
+              the imposter!
+            </p>
+            <p>Try to figure out the secret word during the game.</p>
+          </div>
+        </div>
+
+        <button
+          id="doneViewingBtn"
+          class="w-full text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center hidden dark:bg-green-500 dark:hover:bg-green-600 dark:focus:ring-green-800"
+        >
+          Done
+        </button>
+      </div>
+
+      <!-- Questions Screen -->
+      <div
+        id="questionsScreen"
+        class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6 hidden"
+      >
+        <h2 class="text-xl font-semibold mb-4">Question Round</h2>
+        <div
+          class="text-center p-4 mb-4 bg-gray-50 dark:bg-gray-700 rounded-lg"
+        >
+          <p class="text-lg">
+            Category:
+            <span id="questionCategoryDisplay" class="font-bold"></span>
+          </p>
+          <p class="text-lg mt-2">
+            It's <span id="currentPlayerDisplay" class="font-bold"></span>'s
+            turn
+          </p>
+          <p class="mt-2">
+            Ask a question to
+            <span id="targetPlayerDisplay" class="font-bold"></span>
+          </p>
+        </div>
+        <div class="flex justify-between">
+          <button
+            id="prevQuestionBtn"
+            class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 disabled:opacity-50"
+          >
+            ← Previous
+          </button>
+          <button
+            id="nextQuestionBtn"
+            class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 disabled:opacity-50"
+          >
+            Next →
+          </button>
+        </div>
+        <div class="mt-4">
+          <button
+            id="finishQuestionsBtn"
+            class="w-full text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-500 dark:hover:bg-green-600 dark:focus:ring-green-800"
+          >
+            Finish Questions
+          </button>
+        </div>
+      </div>
+
+      <!-- Voting Screen -->
+      <div
+        id="votingScreen"
+        class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6 hidden"
+      >
+        <h2 class="text-xl font-semibold mb-4">Vote for the Imposter</h2>
+        <p class="mb-4">
+          Everyone should vote for who they think is the imposter:
+        </p>
+        <div id="votingOptions" class="space-y-2 mb-4">
+          <!-- Voting options will be populated here -->
+        </div>
+        <button
+          id="revealImposterBtn"
+          class="w-full text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-800"
+        >
+          Reveal the Imposter
+        </button>
+      </div>
+
+      <!-- Results Screen -->
+      <div
+        id="resultsScreen"
+        class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6 hidden"
+      >
+        <h2 class="text-xl font-semibold mb-4">Game Results</h2>
+        <div
+          class="text-center p-5 mb-6 bg-gray-50 dark:bg-gray-700 rounded-lg"
+        >
+          <p class="text-xl mb-2">
+            The imposter was:
+            <span
+              id="revealedImposter"
+              class="font-bold text-red-600 dark:text-red-400"
+            ></span>
+          </p>
+          <p class="text-lg">
+            The secret word was:
+            <span id="revealedWord" class="font-bold"></span>
+          </p>
+        </div>
+        <div class="flex flex-col space-y-2">
+          <button
+            id="newCategoryBtn"
+            class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-800"
+          >
+            Play Again (New Category)
+          </button>
+          <button
+            id="newGameBtn"
+            class="text-white bg-gray-600 hover:bg-gray-700 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-500 dark:hover:bg-gray-600 dark:focus:ring-gray-800"
+          >
+            Start New Game (New Players)
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Game data
+      const gameCategories = [
+        {
+          name: "Animals",
+          items: [
+            "Lion",
+            "Elephant",
+            "Giraffe",
+            "Zebra",
+            "Tiger",
+            "Penguin",
+            "Kangaroo",
+            "Dolphin",
+            "Eagle",
+            "Bear",
+          ],
+        },
+        {
+          name: "Countries",
+          items: [
+            "Japan",
+            "Brazil",
+            "Egypt",
+            "Australia",
+            "Canada",
+            "Italy",
+            "India",
+            "Mexico",
+            "Russia",
+            "Sweden",
+          ],
+        },
+        {
+          name: "Foods",
+          items: [
+            "Pizza",
+            "Sushi",
+            "Tacos",
+            "Chocolate",
+            "Burger",
+            "Pasta",
+            "Curry",
+            "Steak",
+            "Ice Cream",
+            "Salad",
+          ],
+        },
+        {
+          name: "Sports",
+          items: [
+            "Football",
+            "Basketball",
+            "Tennis",
+            "Swimming",
+            "Golf",
+            "Volleyball",
+            "Baseball",
+            "Cricket",
+            "Boxing",
+            "Skateboarding",
+          ],
+        },
+        {
+          name: "Jobs",
+          items: [
+            "Doctor",
+            "Teacher",
+            "Engineer",
+            "Chef",
+            "Pilot",
+            "Artist",
+            "Firefighter",
+            "Journalist",
+            "Actor",
+            "Scientist",
+          ],
+        },
+      ];
+
+      // Game state
+      let players = [];
+      let currentCategory = null;
+      let secretWord = null;
+      let imposter = null;
+      let currentQuestionIndex = 0;
+      let questionPairs = [];
+      let currentPlayerRevealIndex = 0;
+
+      // DOM elements
+      const playerSetup = document.getElementById("playerSetup");
+      const categorySelection = document.getElementById("categorySelection");
+      const roleRevealScreen = document.getElementById("roleRevealScreen");
+      const questionsScreen = document.getElementById("questionsScreen");
+      const votingScreen = document.getElementById("votingScreen");
+      const resultsScreen = document.getElementById("resultsScreen");
+
+      // Dark mode toggle
+      document
+        .getElementById("darkModeToggle")
+        .addEventListener("click", function () {
+          document.documentElement.classList.toggle("dark");
+        });
+
+      // Initialize the game
+      function initGame() {
+        // Set up player form submission
+        document
+          .getElementById("playerForm")
+          .addEventListener("submit", function (e) {
+            e.preventDefault();
+            const playerNameInput = document.getElementById("playerName");
+            const playerName = playerNameInput.value.trim();
+
+            if (playerName && !players.includes(playerName)) {
+              players.push(playerName);
+              updatePlayerList();
+              playerNameInput.value = "";
+
+              // Enable start button if we have enough players
+              document.getElementById("startGameBtn").disabled =
+                players.length < 3;
+            }
+          });
+
+        // Set up category selection rendering
+        populateCategories();
+
+        // Set up button event listeners
+        document
+          .getElementById("startGameBtn")
+          .addEventListener("click", showCategorySelection);
+        document
+          .getElementById("backToPlayersBtn")
+          .addEventListener("click", backToPlayers);
+        document
+          .getElementById("playerReadyBtn")
+          .addEventListener("click", showPlayerRole);
+        document
+          .getElementById("doneViewingBtn")
+          .addEventListener("click", nextPlayerReveal);
+        document
+          .getElementById("prevQuestionBtn")
+          .addEventListener("click", showPreviousQuestion);
+        document
+          .getElementById("nextQuestionBtn")
+          .addEventListener("click", showNextQuestion);
+        document
+          .getElementById("finishQuestionsBtn")
+          .addEventListener("click", showVoting);
+        document
+          .getElementById("revealImposterBtn")
+          .addEventListener("click", revealImposter);
+        document
+          .getElementById("newCategoryBtn")
+          .addEventListener("click", showCategorySelection);
+        document
+          .getElementById("newGameBtn")
+          .addEventListener("click", resetGame);
+      }
+
+      function updatePlayerList() {
+        const playerList = document.getElementById("playerList");
+        playerList.innerHTML = "";
+
+        players.forEach((player) => {
+          const li = document.createElement("li");
+          li.className = "flex justify-between items-center mb-1";
+
+          const playerName = document.createElement("span");
+          playerName.textContent = player;
+
+          const removeBtn = document.createElement("button");
+          removeBtn.innerHTML = "&times;";
+          removeBtn.className =
+            "text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300";
+          removeBtn.addEventListener("click", function () {
+            players = players.filter((p) => p !== player);
+            updatePlayerList();
+            document.getElementById("startGameBtn").disabled =
+              players.length < 3;
+          });
+
+          li.appendChild(playerName);
+          li.appendChild(removeBtn);
+          playerList.appendChild(li);
+        });
+      }
+
+      function populateCategories() {
+        const categoriesList = document.getElementById("categoriesList");
+        categoriesList.innerHTML = "";
+
+        gameCategories.forEach((category) => {
+          const categoryBtn = document.createElement("button");
+          categoryBtn.className =
+            "bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 p-4 rounded-lg text-center";
+          categoryBtn.textContent = category.name;
+          categoryBtn.addEventListener("click", function () {
+            selectCategory(category);
+          });
+
+          categoriesList.appendChild(categoryBtn);
+        });
+      }
+
+      function showCategorySelection() {
+        playerSetup.classList.add("hidden");
+        resultsScreen.classList.add("hidden");
+        categorySelection.classList.remove("hidden");
+      }
+
+      function backToPlayers() {
+        categorySelection.classList.add("hidden");
+        playerSetup.classList.remove("hidden");
+      }
+
+      function selectCategory(category) {
+        currentCategory = category;
+        secretWord =
+          category.items[Math.floor(Math.random() * category.items.length)];
+        imposter = players[Math.floor(Math.random() * players.length)];
+
+        // Start the player reveal process
+        currentPlayerRevealIndex = 0;
+        startPlayerReveal();
+
+        // Show the role reveal screen
+        categorySelection.classList.add("hidden");
+        roleRevealScreen.classList.remove("hidden");
+      }
+
+      function startPlayerReveal() {
+        // Reset the role reveal screen
+        document.getElementById("roleInfo").classList.add("hidden");
+        document.getElementById("doneViewingBtn").classList.add("hidden");
+        document.getElementById("playerReadyBtn").classList.remove("hidden");
+        document
+          .getElementById("passingInstructions")
+          .classList.remove("hidden");
+        document.getElementById("nonImposterInfo").classList.add("hidden");
+        document.getElementById("imposterInfo").classList.add("hidden");
+
+        // Display the current player's name
+        document.getElementById("currentPlayerReveal").textContent =
+          players[currentPlayerRevealIndex];
+        document.getElementById("categoryDisplay").textContent =
+          currentCategory.name;
+      }
+
+      function showPlayerRole() {
+        // Show the appropriate role information
+        document.getElementById("passingInstructions").classList.add("hidden");
+        document.getElementById("playerReadyBtn").classList.add("hidden");
+        document.getElementById("roleInfo").classList.remove("hidden");
+        document.getElementById("doneViewingBtn").classList.remove("hidden");
+
+        const currentPlayer = players[currentPlayerRevealIndex];
+
+        // Show different information based on whether the player is the imposter
+        if (currentPlayer === imposter) {
+          document.getElementById("imposterInfo").classList.remove("hidden");
+          document.getElementById("nonImposterInfo").classList.add("hidden");
+        } else {
+          document.getElementById("nonImposterInfo").classList.remove("hidden");
+          document.getElementById("imposterInfo").classList.add("hidden");
+          document.getElementById("secretWordReveal").textContent = secretWord;
+        }
+      }
+
+      function nextPlayerReveal() {
+        currentPlayerRevealIndex++;
+
+        if (currentPlayerRevealIndex < players.length) {
+          // There are more players to reveal to
+          startPlayerReveal();
+        } else {
+          // All players have seen their roles, start the question round
+          startQuestions();
+        }
+      }
+
+      function startQuestions() {
+        // Generate question pairs
+        generateQuestionPairs();
+        currentQuestionIndex = 0;
+
+        // Display the category name
+        document.getElementById("questionCategoryDisplay").textContent =
+          currentCategory.name;
+
+        // Show the first question pair
+        updateQuestionDisplay();
+
+        // Show questions screen
+        roleRevealScreen.classList.add("hidden");
+        questionsScreen.classList.remove("hidden");
+      }
+
+      function generateQuestionPairs() {
+        questionPairs = [];
+
+        // Create a full round of questions where each player asks another player
+        let askers = [...players];
+        let targets = [...players];
+
+        // Shuffle the arrays to create random pairings
+        shuffleArray(askers);
+        shuffleArray(targets);
+
+        // Make sure players don't ask themselves
+        for (let i = 0; i < askers.length; i++) {
+          if (askers[i] === targets[i]) {
+            // Find a position to swap with
+            for (let j = 0; j < targets.length; j++) {
+              if (
+                i !== j &&
+                askers[i] !== targets[j] &&
+                askers[j] !== targets[i]
+              ) {
+                // Swap targets
+                [targets[i], targets[j]] = [targets[j], targets[i]];
+                break;
+              }
+            }
+          }
+        }
+
+        // Create the question pairs
+        for (let i = 0; i < askers.length; i++) {
+          questionPairs.push({
+            asker: askers[i],
+            target: targets[i],
+          });
+        }
+      }
+
+      function updateQuestionDisplay() {
+        // Enable/disable navigation buttons
+        document.getElementById("prevQuestionBtn").disabled =
+          currentQuestionIndex === 0;
+        document.getElementById("nextQuestionBtn").disabled =
+          currentQuestionIndex === questionPairs.length - 1;
+
+        // Update the display
+        const pair = questionPairs[currentQuestionIndex];
+        document.getElementById("currentPlayerDisplay").textContent =
+          pair.asker;
+        document.getElementById("targetPlayerDisplay").textContent =
+          pair.target;
+      }
+
+      function showPreviousQuestion() {
+        if (currentQuestionIndex > 0) {
+          currentQuestionIndex--;
+          updateQuestionDisplay();
+        }
+      }
+
+      function showNextQuestion() {
+        if (currentQuestionIndex < questionPairs.length - 1) {
+          currentQuestionIndex++;
+          updateQuestionDisplay();
+        }
+      }
+
+      function showVoting() {
+        // Generate voting options
+        const votingOptions = document.getElementById("votingOptions");
+        votingOptions.innerHTML = "";
+
+        players.forEach((player) => {
+          const radioDiv = document.createElement("div");
+          radioDiv.className = "flex items-center";
+
+          const radio = document.createElement("input");
+          radio.type = "radio";
+          radio.name = "imposterVote";
+          radio.id = `vote_${player}`;
+          radio.value = player;
+          radio.className =
+            "w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:text-blue-500 dark:bg-gray-700 dark:border-gray-600";
+
+          const label = document.createElement("label");
+          label.htmlFor = `vote_${player}`;
+          label.className =
+            "ml-2 text-sm font-medium text-gray-900 dark:text-gray-100";
+          label.textContent = player;
+
+          radioDiv.appendChild(radio);
+          radioDiv.appendChild(label);
+          votingOptions.appendChild(radioDiv);
+        });
+
+        // Show voting screen
+        questionsScreen.classList.add("hidden");
+        votingScreen.classList.remove("hidden");
+      }
+
+      function revealImposter() {
+        // Update results screen
+        document.getElementById("revealedImposter").textContent = imposter;
+        document.getElementById("revealedWord").textContent = secretWord;
+
+        // Show results screen
+        votingScreen.classList.add("hidden");
+        resultsScreen.classList.remove("hidden");
+      }
+
+      function resetGame() {
+        // Reset game state
+        players = [];
+        currentCategory = null;
+        secretWord = null;
+        imposter = null;
+
+        // Update UI
+        updatePlayerList();
+        document.getElementById("startGameBtn").disabled = true;
+
+        // Show player setup screen
+        resultsScreen.classList.add("hidden");
+        playerSetup.classList.remove("hidden");
+      }
+
+      // Utility function to shuffle an array
+      function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+      }
+
+      // Initialize the game when the page loads
+      document.addEventListener("DOMContentLoaded", initGame);
+    </script>
+  </body>
+</html>
